@@ -20,6 +20,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Adapter
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -36,6 +37,8 @@ import com.google.android.material.snackbar.Snackbar
  * (Because we have not learned about RecyclerView yet.)
  */
 class SleepTrackerFragment : Fragment() {
+
+
 
     /**
      * Called when the Fragment is ready to display content to the screen.
@@ -60,6 +63,13 @@ class SleepTrackerFragment : Fragment() {
                         this, viewModelFactory).get(SleepTrackerViewModel::class.java)
 
         binding.sleepTrackerViewModel = sleepTrackerViewModel
+        var adapter=SleepNightAdapter()
+         binding.sleepList.adapter=adapter
+        sleepTrackerViewModel.nights.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                adapter.submitList(it)
+            }
+        })
 
         binding.lifecycleOwner = this
 
